@@ -17,15 +17,18 @@ public class Main {
 
     public static void main(String[] args) {
         boolean quit = false;
-        Path path = FileSystems.getDefault().getPath(Data.getPathOfDesktop());
+        Path path;
 
-        if(path == null) {
+        if (Data.getPathOfDesktop() == null) {
             path = checkFolder();
+        }else {
+             path = FileSystems.getDefault().getPath(Data.getPathOfDesktop());
         }
 
 
         while(!quit) {
             char choice;
+            System.out.println("*************************************************");
             System.out.println("Your current folder is " + Data.getPathOfDesktop().toString());
             System.out.println("Choose an option:");
             System.out.println("1. Show extensions to move");
@@ -37,6 +40,7 @@ public class Main {
             System.out.println("C. Clean folder");
             System.out.println("Q. Quit");
             System.out.println("0. Reset settings");
+            System.out.println("*************************************************");
             choice = scanner.nextLine().toUpperCase().charAt(0);
 
             switch (choice) {
@@ -57,7 +61,11 @@ public class Main {
                     break;
                 case 'C':
                     Cleaner cleaner = new Cleaner(path, Data.getExtensions());
-                    cleaner.doCleaning();
+                    if(cleaner.doCleaning()) {
+                        System.out.println("Your directory is clean.");
+                    }else {
+                        System.out.println("You have no extensions added.");
+                    }
                     break;
                 case 'Q':
                     quit = true;
@@ -101,7 +109,13 @@ public class Main {
 
     private static void showExtensions() {
         HashSet<FileExtension> extensions = Data.getExtensions();
-        System.out.println("\tFile type\t\tFolder");
+
+        if(extensions.size() == 0) {
+            System.out.println("\tNo extensions added");
+            return;
+        }else
+            System.out.println("\tFile type\t\tFolder");
+
         Iterator<FileExtension> iterator = extensions.iterator();
         int i = 1;
         while(iterator.hasNext()) {
@@ -128,6 +142,10 @@ public class Main {
     private static void changeExtensionFolder() {
         HashSet<FileExtension> extensions = Data.getExtensions();
         System.out.print("Your extensions: ");
+        if(extensions.size() == 0) {
+            System.out.println("no extensions added");
+            return;
+        }
         Iterator<FileExtension> iterator = extensions.iterator();
         while(iterator.hasNext()) {
             System.out.print(iterator.next().getExtension());
@@ -148,6 +166,10 @@ public class Main {
     private static void removeExtension() {
         HashSet<FileExtension> extensions = Data.getExtensions();
         System.out.print("Your extensions: ");
+        if(extensions.size() == 0) {
+            System.out.println("no extensions added");
+            return;
+        }
         Iterator<FileExtension> iterator = extensions.iterator();
         while(iterator.hasNext()) {
             System.out.print(iterator.next().getExtension());

@@ -17,8 +17,11 @@ public class Cleaner {
         this.extensions = extensions;
     }
 
-    public void doCleaning() {
+    public boolean doCleaning() {
         Iterator<FileExtension> iterator = extensions.iterator();
+        if(extensions.size() == 0) {
+            return false;
+        }
         while(iterator.hasNext()) {
             FileExtension currentExt = iterator.next();
             String extension = currentExt.getExtension();
@@ -46,5 +49,6 @@ public class Cleaner {
             }
         }
 
+        return true;
     }
 }
